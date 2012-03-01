@@ -3,7 +3,7 @@
 
 'use strict';
 
-const SHORTCUTS_HEIGHT = 144;
+var SHORTCUTS_HEIGHT = 144;
 
 var displayState;
 
@@ -21,7 +21,7 @@ function toggleSourceViewer(url) {
 }
 
 function getSourceViewerElement() {
-  return content.document.getElementById('appViewsource');
+  return document.getElementById('appViewsource');
 }
 
 function isSourceViewerActive() {
@@ -35,10 +35,10 @@ function showSourceViewer(url) {
   if (!viewsource) {
     var style = '#appViewsource { ' +
                 '  position: absolute;' +
-                '  top: -moz-calc(10%);' +
-                '  left: -moz-calc(10%);' +
-                '  width: -moz-calc(80% - 2 * 15px);' +
-                '  height: -moz-calc(80% - 2 * 15px);' +
+                '  top: 10%;' +
+                '  left: 10%;' +
+                '  width: 70%;' +
+                '  height: 70%;' +
                 '  visibility: hidden;' +
                 '  box-shadow: 10px 10px 5px #888;' +
                 '  margin: 15px;' +
@@ -312,6 +312,7 @@ IconGrid.prototype = {
     // position a div using transform
     function setPosition(div, x, y) {
       div.style.MozTransform = 'translate(' + x + ',' + y + ')';
+      div.style.webkitTransform = 'translate(' + x + ',' + y + ')';
     }
 
     // get page divs
@@ -429,6 +430,8 @@ IconGrid.prototype = {
       var style = page.style;
       style.MozTransform = 'translateX(-moz-calc(' + (n - currentPage) + '00% + ' + x + 'px))';
       style.MozTransition = duration ? ('all ' + duration + 's ease;') : "";
+      style.webkitTransform = 'translateX(-webkit-calc(' + (n - currentPage) + '00% + ' + x + 'px))';
+      style.webkitTransition = duration ? ('all ' + duration + 's ease;') : "";
     }
   },
   setPage: function(number, duration) {
@@ -443,6 +446,8 @@ IconGrid.prototype = {
       var style = page.style;
       style.MozTransform = 'translateX(' + (n - number) + '00%)';
       style.MozTransition = duration ? ('all ' + duration + 's ease') : "";
+      style.webkitTransform = 'translateX(' + (n - number) + '00%)';
+      style.webkitTransition = duration ? ('all ' + duration + 's ease') : "";
     }
     var dots = this.dots;
     if (dots)
@@ -461,7 +466,7 @@ IconGrid.prototype = {
       physics.onTouchMove(e.touches[0]);
       break;
     case 'touchend':
-      document.releaseCapture();
+      // JB: document.releaseCapture();
       physics.onTouchEnd(e.changedTouches[0]);
       break;
     case 'resize':
@@ -543,6 +548,8 @@ NotificationScreen.prototype = {
     var style = this.touchables[0].style;
     style.MozTransition = '';
     style.MozTransform = 'translateY(' + dy + 'px)';
+    style.webkitTransition = '';
+    style.webkitTransform = 'translateY(' + dy + 'px)';
   },
   onTouchEnd: function(e) {
     var dy = -(this.startY - e.pageY);
@@ -557,12 +564,16 @@ NotificationScreen.prototype = {
     var style = this.touchables[0].style;
     style.MozTransition = '-moz-transform 0.2s linear';
     style.MozTransform = 'translateY(0)';
+    style.webkitTransition = '-webkit-transform 0.2s linear';
+    style.webkitTransform = 'translateY(0)';
     this.locked = false;
   },
   lock: function(dy) {
     var style = this.touchables[0].style;
     style.MozTransition = '-moz-transform 0.2s linear';
     style.MozTransform = 'translateY(100%)';
+    style.webkitTransition = '-webkit-transform 0.2s linear';
+    style.webkitTransform = 'translateY(100%)';
     this.locked = true;
   },
   attachEvents: function ns_attachEvents(view) {
@@ -580,7 +591,7 @@ NotificationScreen.prototype = {
       hideSourceViewer();
       this.active = true;
 
-      target.setCapture(this);
+      // JB: target.setCapture(this);
       this.onTouchStart(evt.touches[0]);
       break;
     case 'touchmove':
@@ -594,7 +605,7 @@ NotificationScreen.prototype = {
         return;
       this.active = false;
 
-      document.releaseCapture();
+      // JB: document.releaseCapture();
       this.onTouchEnd(evt.changedTouches[0]);
       break;
     default:
@@ -646,6 +657,8 @@ LockScreen.prototype = {
       var style = this.overlay.style;
       style.MozTransition = '';
       style.MozTransform = 'translateY(' + dy + 'px)';
+      style.webkitTransition = '';
+      style.webkitTransform = 'translateY(' + dy + 'px)';
     }
   },
   onTouchEnd: function(e) {
@@ -666,6 +679,8 @@ LockScreen.prototype = {
     var style = this.overlay.style;
     style.MozTransition = instant ? '' : '-moz-transform 0.2s linear';
     style.MozTransform = 'translateY(' + offset + ')';
+    style.webkitTransition = instant ? '' : '-webkit-transform 0.2s linear';
+    style.webkitTransform = 'translateY(' + offset + ')';
     changeDisplayState('unlocked');
 
     var unlockEvent = document.createEvent('CustomEvent');
@@ -676,9 +691,12 @@ LockScreen.prototype = {
     var style = this.overlay.style;
     if (instant) {
       style.MozTransition = style.MozTransform = '';
+      style.webkitTransition = style.webkitTransform = '';
     } else {
       style.MozTransition = '-moz-transform 0.2s linear';
       style.MozTransform = 'translateY(0)';
+      style.webkitTransition = '-webkit-transform 0.2s linear';
+      style.webkitTransform = 'translateY(0)';
     }
     changeDisplayState('locked');
 
@@ -692,14 +710,14 @@ LockScreen.prototype = {
     switch (e.type) {
     case 'touchstart':
       this.onTouchStart(e.touches[0]);
-      this.overlay.setCapture(false);
+      // JB: this.overlay.setCapture(false);
       break;
     case 'touchmove':
       this.onTouchMove(e.touches[0]);
       break;
     case 'touchend':
       this.onTouchEnd(e.changedTouches[0]);
-      document.releaseCapture();
+      //JB: document.releaseCapture();
       break;
     case 'sleep':
       // Lock the screen when screen is turn off can stop
@@ -799,8 +817,13 @@ function updateClock() {
   var match = document.getElementsByClassName('time');
   for (var n = 0; n < match.length; ++n) {
     var element = match[n];
-    element.textContent = now.toLocaleFormat(element.dataset.format);
+    // JB: element.textContent = now.toLocaleFormat(element.dataset.format);
+    element.textContent = now.getHours()+":"+now.getMinutes();
   }
+
+  // JB-Webkit hack for date - assumes only one instance
+  var dmatch = document.getElementsByClassName('tdate');
+  dmatch[0].textContent = now.toDateString();
 
   // Schedule another clock update when a new minute rolls around
   var now = new Date();

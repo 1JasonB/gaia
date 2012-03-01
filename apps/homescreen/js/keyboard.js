@@ -3,7 +3,7 @@
 
 'use strict';
 
-const IMEManager = {
+var IMEManager = {
   BASIC_LAYOUT: -1,
   ALTERNATE_LAYOUT: -2,
   SWITCH_KEYBOARD: -3,

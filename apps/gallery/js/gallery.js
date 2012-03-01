@@ -279,6 +279,8 @@ var Gallery = {
       var pageOffset = (p - currentPage) - 1;
       style.MozTransform = 'translate(-moz-calc('+ pageOffset +'00% + '+ x +'px))';
       style.MozTransition = duration ? ('all '+ duration + 's ease') : '';
+      style.webkitTransform = 'translate(' + pageOffset*100 + x/10 + '%)';
+      style.webkitTransition = duration ? ('all '+ duration + 's ease') : '';
     }
   },
 

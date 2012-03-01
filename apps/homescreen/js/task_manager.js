@@ -72,7 +72,8 @@ var TaskManager = {
     var item = document.createElement('li');
     item.id = 'task_' + id;
 
-    var style = 'background: -moz-element(#window_' + id + ') no-repeat';
+    // var style = 'background: -moz-element(#window_' + id + ') no-repeat';
+    var style = 'background: -webkit-element(#window_' + id + ') no-repeat';
     item.setAttribute('style', style);
 
     var close = document.createElement('a');
